@@ -30,6 +30,11 @@ include_once(dirname(__FILE__).'/sendtoafriend.php');
 
 $module = new SendToAFriend();
 
+if (false === $module->active) {
+
+	Controller::getController('PageNotFoundController')->run();
+}
+
 if (Tools::getValue('action') == 'sendToMyFriend' && Tools::getValue('secure_key') == $module->secure_key)
 {
 		// Retrocompatibilty with old theme
@@ -56,6 +61,13 @@ if (Tools::getValue('action') == 'sendToMyFriend' && Tools::getValue('secure_key
 
 		if (!$friendName || !$friendMail || !$id_product)
 			die('0');
+
+		$isValidEmail = Validate::isEmail($friendMail);
+		$isValidName  = $module->isValidName($friendName);
+
+		if (false === $isValidName || false === $isValidEmail) {
+			die('0');
+		}
 
 		/* Email generation */
 		$product = new Product((int)$id_product, false, $module->context->language->id);
