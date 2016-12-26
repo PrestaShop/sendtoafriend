@@ -40,7 +40,7 @@ class sendToAFriend extends Module
 		$this->author = 'PrestaShop';
  	 	$this->tab = 'front_office_features';
 		$this->need_instance = 0;
-		$this->secure_key = Tools::encrypt($this->name);
+		$this->secure_key = Tools::hash($this->name);
 
 		parent::__construct();
 
